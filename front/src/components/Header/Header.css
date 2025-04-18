@@ -21,7 +21,7 @@ header.shrink {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 250px;
+  gap: 200px;
   max-width: 1400px;
   width: 100%;
   padding: 0 20px;
@@ -37,10 +37,15 @@ header.shrink {
   margin: 0;
 }
 
+.nav-left {
+  min-width: 100px;
+}
+
 .logo-img {
-  width: 100%;
+  width: 70%;
   cursor: pointer;
   transition: all 0.3s ease;
+  min-width: 110px;
 }
 
 header.shrink .logo-img {
@@ -67,6 +72,20 @@ header.shrink .logo-img {
   transform: scale(0.9);
 }
 
+.auth-button {
+  cursor: pointer;
+  background-color: #4169e1;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  font-size: 18px;
+}
+
+.auth-button:hover {
+  background-color: #3457b2;
+}
+
 /* Dropdown styles */
 .dropdown-parent {
   position: relative;
@@ -77,7 +96,7 @@ header.shrink .logo-img {
   top: 100%;
   left: -20px;
   background-color: #000;
-  min-width: 200px;
+  min-width: 250px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
   z-index: 1001;
   margin-top: 10px;
@@ -148,6 +167,11 @@ body {
     width: 130px;
     height: 52px;
   }
+
+  .auth-button {
+    padding: 8px 16px;
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -183,6 +207,11 @@ body {
 
   .dropdown-menu {
     min-width: 200px;
+  }
+
+  .auth-button {
+    padding: 6px 12px;
+    font-size: 14px;
   }
 
   body {

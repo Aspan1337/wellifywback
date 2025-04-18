@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Header.css";
 
 const Header = () => {
   const [showWorkoutDropdown, setShowWorkoutDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -49,13 +51,17 @@ const Header = () => {
     setShowWorkoutDropdown(!showWorkoutDropdown);
   };
 
+  const navigateToAuth = () => {
+    navigate("/auth");
+  };
+
   return (
     <header>
       <nav className="navigation">
         <div className="nav-left">
           <div className="logo">
             <img
-              src="/wellify/wellifylogo1.png"
+              src="/wellifylogo1.png"
               alt="Wellify Logo"
               onClick={() => scrollToSection("main")}
               className="logo-img"
@@ -92,11 +98,18 @@ const Header = () => {
                   >
                     Индивидуальный комплекс тренировок
                   </div>
+                  <div
+                    className="dropdown-item"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      scrollToSection("gym");
+                      setShowWorkoutDropdown(false);
+                    }}
+                  >
+                    Тренажерные залы
+                  </div>
                 </div>
               )}
-            </li>
-            <li className="nav-el" onClick={() => scrollToSection("gym")}>
-              GYM
             </li>
             <li className="nav-el" onClick={() => scrollToSection("diet")}>
               Питание
@@ -109,6 +122,9 @@ const Header = () => {
             </li>
             <li className="nav-el" onClick={() => scrollToSection("footer")}>
               Контакты
+            </li>
+            <li className="auth-button" onClick={navigateToAuth}>
+              Войти
             </li>
           </ul>
         </div>
