@@ -11,6 +11,8 @@ import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
 import Individual_Warmups from "./components/Individual_Warmups/Individual_Warmups";
 import SportBrands from "./components/SportBrands/SportBrands";
 import Auth from "./components/Auth/Auth";
+import Profile from "./components/Profile/Profile";
+import Settings from "./components/Settings/Settings";
 
 function HomePage() {
   return (
@@ -56,6 +58,8 @@ function App() {
       <Routes>
         <Route path="/auth" element={<Auth />} />
         <Route path="/" element={<HomePage />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </Router>
   );

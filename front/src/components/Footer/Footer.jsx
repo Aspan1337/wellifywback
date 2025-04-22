@@ -64,7 +64,7 @@ const Footer = () => {
           <h3>Контакты</h3>
           <p>+7 (777) 777 77 77</p>
           <a href="mailto:wellify@gmail.com" className="footer-email">
-            support@wellify.com
+            wellify.official@gmail.com
           </a>
           <button className="feedback-link" onClick={openModal}>
             Обратная связь

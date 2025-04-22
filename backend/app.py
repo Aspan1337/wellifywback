@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user, UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from mailjet_rest import Client
 import random
@@ -9,18 +10,19 @@ from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
+app.secret_key = "d7e9c8349f874497ad74d52c2b882d22"
+
 
 db = SQLAlchemy(app)
 CORS(app, origins=["http://localhost:5173"], supports_credentials=True)
 
-# Mailjet setup
-mailjet = Client(auth=(app.config['MAILJET_API_KEY'], app.config['MAILJET_SECRET_KEY']), version='v3.1')
+login_manager = LoginManager()
+login_manager.init_app(app)
 
-# Временное хранилище кодов
+mailjet = Client(auth=(app.config['MAILJET_API_KEY'], app.config['MAILJET_SECRET_KEY']), version='v3.1')
 reset_codes = {}
 
-# Модель пользователя
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100), nullable=False)
@@ -28,6 +30,13 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    def get_id(self):
+        return str(self.id)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -51,7 +60,6 @@ def register():
     )
     db.session.add(new_user)
     db.session.commit()
-
     return jsonify({"message": "Регистрация успешна"}), 201
 
 @app.route('/api/login', methods=['POST'])
@@ -64,13 +72,36 @@ def login():
     if not user or not check_password_hash(user.password_hash, password):
         return jsonify({"error": "Неверный логин или пароль"}), 401
 
-    return jsonify({"message": "Успешный вход", "first_name": user.first_name}), 200
+    login_user(user)  # ✅ устанавливаем сессию
+    return jsonify({
+        "message": "Успешный вход",
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": user.email,
+        "created_at": user.created_at.strftime('%Y-%m-%d')
+    }), 200
+
+@app.route('/api/profile', methods=['GET'])
+@login_required
+def profile():
+    user = current_user
+    return jsonify({
+        "first_name": user.first_name,
+        "last_name": user.last_name,
+        "email": user.email,
+        "created_at": user.created_at.strftime('%Y-%m-%d')
+    })
+
+@app.route('/api/logout', methods=['POST'])
+@login_required
+def logout():
+    logout_user()
+    return jsonify({"message": "Выход выполнен"})
 
 @app.route('/api/reset-password', methods=['POST'])
 def reset_password():
     data = request.get_json()
     email = data.get("email")
-
     user = User.query.filter_by(email=email).first()
     if not user:
         return jsonify({"error": "Пользователь не найден"}), 404
@@ -101,7 +132,6 @@ def reset_password():
 
     return jsonify({"message": "Код отправлен на почту"}), 200
 
-# Подтверждение кода и смена пароля
 @app.route('/api/confirm-reset', methods=['POST'])
 def confirm_reset():
     data = request.get_json()
@@ -119,10 +149,31 @@ def confirm_reset():
     user.password_hash = generate_password_hash(new_password)
     db.session.commit()
     reset_codes.pop(email, None)
-
     return jsonify({"message": "Пароль успешно изменен"}), 200
 
-# Проверка соединения
+@app.route('/api/update-profile', methods=['POST'])
+@login_required
+def update_profile():
+    data = request.get_json()
+    current_user.first_name = data.get("first_name")
+    current_user.last_name = data.get("last_name")
+    db.session.commit()
+    return jsonify({"message": "Профиль обновлён"}), 200
+
+@app.route('/api/update-password', methods=['POST'])
+@login_required
+def update_password():
+    data = request.get_json()
+    current_password = data.get("currentPassword")
+    new_password = data.get("newPassword")
+
+    if not check_password_hash(current_user.password_hash, current_password):
+        return jsonify({"error": "Неверный текущий пароль"}), 403
+
+    current_user.password_hash = generate_password_hash(new_password)
+    db.session.commit()
+    return jsonify({"message": "Пароль обновлён"}), 200
+
 @app.route('/api/test-db', methods=['GET'])
 def test_db():
     try:
@@ -131,7 +182,6 @@ def test_db():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 500
 
-# Запуск
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()

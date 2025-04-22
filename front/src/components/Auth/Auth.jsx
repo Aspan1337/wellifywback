@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Auth.css";
 
 const Auth = () => {
-  const API_BASE = "http://127.0.0.1:5000";
+  const API_BASE = "http://localhost:5000";
   const [isSignUp, setIsSignUp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState(null);
-  const [messageType, setMessageType] = useState(null); // 'success' | 'error'
+  const [messageType, setMessageType] = useState(null);
   const [forgotPassword, setForgotPassword] = useState(false);
-  const [resetStep, setResetStep] = useState("email"); // 'email' | 'verification'
+  const [resetStep, setResetStep] = useState("email");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const originalStyle = window.getComputedStyle(document.body).overflow;
@@ -18,6 +19,7 @@ const Auth = () => {
       document.body.style.overflow = originalStyle;
     };
   }, []);
+
   useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
@@ -63,19 +65,15 @@ const Auth = () => {
 
     if (forgotPassword) {
       if (resetStep === "email") {
-        // Handle email submission for password reset
         try {
           const email = e.target.email.value;
-          // Замените это на реальный API запрос
           const res = await fetch(`${API_BASE}/api/reset-password`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email }),
           });
-
           const result = await res.json();
           if (!res.ok) throw new Error(result.error || "Ошибка");
-
           setMessage("Код для сброса пароля отправлен на вашу почту");
           setMessageType("success");
           setResetStep("verification");
@@ -84,25 +82,20 @@ const Auth = () => {
           setMessageType("error");
         }
       } else if (resetStep === "verification") {
-        // Handle verification code and new password submission
         try {
           const code = e.target.code.value;
           const newPassword = e.target.newPassword.value;
           const email = e.target.email.value;
 
-          // Замените это на реальный API запрос
           const res = await fetch(`${API_BASE}/api/confirm-reset`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, code, newPassword }),
           });
-
           const result = await res.json();
           if (!res.ok) throw new Error(result.error || "Ошибка");
-
           setMessage("Пароль успешно изменен");
           setMessageType("success");
-          // Возвращаемся к форме входа
           setForgotPassword(false);
         } catch (err) {
           setMessage(err.message || "Произошла ошибка");
@@ -110,7 +103,6 @@ const Auth = () => {
         }
       }
     } else {
-      // Original login/register logic
       const formData = {
         first_name: isSignUp ? e.target.first_name.value : undefined,
         last_name: isSignUp ? e.target.last_name.value : undefined,
@@ -126,12 +118,18 @@ const Auth = () => {
           credentials: "include",
           body: JSON.stringify(formData),
         });
-
         const result = await res.json();
         if (!res.ok) throw new Error(result.error || "Ошибка");
 
         setMessage(result.message || "Успешно");
         setMessageType("success");
+
+        if (!isSignUp) {
+          localStorage.setItem("isAuthenticated", "true");
+          setTimeout(() => {
+            navigate("/");
+          }, 1000);
+        }
       } catch (err) {
         setMessage(err.message || "Произошла ошибка");
         setMessageType("error");

@@ -1,19 +1,38 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 
 const Header = () => {
   const [showWorkoutDropdown, setShowWorkoutDropdown] = useState(false);
+  const [isAuth, setIsAuth] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const userMenuRef = useRef(null);
+    
+  const toggleUserMenu = () => {
+    setShowUserMenu(!showUserMenu);
+  };
+  const isNotHomePage = location.pathname !== "/";
 
   useEffect(() => {
+    if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+      setShowUserMenu(false);
+    }
+
+    const auth = localStorage.getItem("isAuthenticated") === "true";
+    setIsAuth(auth);
+
+
     const handleScroll = () => {
       const header = document.querySelector("header");
-      if (window.scrollY > 50) {
-        header.classList.add("shrink");
-      } else {
-        header.classList.remove("shrink");
+      if (header) {
+        if (window.scrollY > 50 || isNotHomePage) {
+          header.classList.add("shrink");
+        } else if (!isNotHomePage) {
+          header.classList.remove("shrink");
+        }
       }
     };
 
@@ -23,6 +42,13 @@ const Header = () => {
       }
     };
 
+    if (isNotHomePage) {
+      const header = document.querySelector("header");
+      if (header) {
+        header.classList.add("shrink");
+      }
+    }
+
     window.addEventListener("scroll", handleScroll);
     document.addEventListener("mousedown", handleClickOutside);
 
@@ -30,19 +56,24 @@ const Header = () => {
       window.removeEventListener("scroll", handleScroll);
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [isNotHomePage]);
 
   const scrollToSection = (id) => {
-    const element = document.getElementById(id);
-    if (element) {
-      const headerHeight = document.querySelector("header").offsetHeight;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.scrollY - headerHeight;
+    if (location.pathname === "/") {
+      const element = document.getElementById(id);
+      if (element) {
+        const headerHeight =
+          document.querySelector("header")?.offsetHeight || 0;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.scrollY - headerHeight;
 
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    } else {
+      navigate(`/#${id}`);
     }
   };
 
@@ -55,15 +86,37 @@ const Header = () => {
     navigate("/auth");
   };
 
+  const navigateToHome = () => {
+    navigate("/");
+  };
+
+  const navigateToProfile = () => {
+    navigate("/profile");
+  };
+
+  const navigateToSettings = () => {
+    navigate("/settings");
+  };
+
+  const handleLogout = async () => {
+    await fetch("http://localhost:5000/api/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+    localStorage.removeItem("isAuthenticated");
+    setIsAuth(false);
+    navigate("/");
+  };
+
   return (
-    <header>
+    <header className={`header ${isNotHomePage ? "shrink" : ""}`}>
       <nav className="navigation">
         <div className="nav-left">
           <div className="logo">
             <img
               src="/wellifylogo1.png"
               alt="Wellify Logo"
-              onClick={() => scrollToSection("main")}
+              onClick={navigateToHome}
               className="logo-img"
             />
           </div>
@@ -123,9 +176,35 @@ const Header = () => {
             <li className="nav-el" onClick={() => scrollToSection("footer")}>
               Контакты
             </li>
-            <li className="auth-button" onClick={navigateToAuth}>
-              Войти
-            </li>
+            {!isAuth ? (
+              <li className="auth-button" onClick={navigateToAuth}>
+                Войти
+              </li>
+            ) : (
+              <li
+                className="auth-button dropdown1-parent"
+                onClick={toggleUserMenu}
+                ref={userMenuRef}
+              >
+                ☰
+                {showUserMenu && (
+                  <div className="dropdown1-menu">
+                    <div className="dropdown1-item" onClick={navigateToProfile}>
+                      Профиль
+                    </div>
+                    <div
+                      className="dropdown1-item"
+                      onClick={navigateToSettings}
+                    >
+                      Настройки
+                    </div>
+                    <div className="dropdown1-item" onClick={handleLogout}>
+                      Выйти
+                    </div>
+                  </div>
+                )}
+              </li>
+            )}
           </ul>
         </div>
       </nav>
