@@ -1,0 +1,227 @@
+.page-container {
+  font-family: "Montserrat";
+  color: #333;
+}
+
+.comments-container {
+  max-width: 1400px;
+  margin: 0 150px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 25px;
+  margin-bottom: 350px;
+}
+
+.comments-stats {
+  display: flex;
+  justify-content: space-between;
+  color: #7f8c8d;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+
+.new-comment-section,
+.comments-section {
+  margin-bottom: 40px;
+}
+
+.new-comment-section h2,
+.comments-section h2 {
+  font-size: 22px;
+  margin-bottom: 15px;
+}
+
+.new-comment-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.new-comment-section textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px;
+  border-radius: 6px;
+  font-family: "Montserrat";
+  font-size: 16px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+/* --- Комментарии и ответы --- */
+.comment {
+  margin-bottom: 25px;
+  padding: 15px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.reply-form {
+  margin-top: 10px;
+}
+
+.reply-form textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 10px;
+  font-family: "Montserrat";
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.reply {
+  margin-top: 10px;
+  margin-left: 20px;
+  padding: 12px;
+  background-color: #f1f1f1;
+  border-radius: 6px;
+  border: 1px solid #e6e6e6;
+}
+
+/* --- Дата и имя пользователя --- */
+.comment p,
+.reply p {
+  margin: 4px 0;
+}
+
+.comment b,
+.reply b {
+  color: #2c3e50;
+}
+
+/* --- Кнопки --- */
+button {
+  cursor: pointer;
+}
+
+.submit-button,
+.new-comment-section button,
+.reply-form button {
+  background-color: #4169e1;
+  color: white;
+  font-weight: bold;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 5px;
+  transition: background-color 0.3s;
+  font-size: 16px;
+}
+
+.submit-button:hover,
+.new-comment-section button:hover,
+.reply-form button:hover {
+  background-color: #3457b2;
+}
+
+button.delete-button {
+  background: none;
+  color: #e74c3c;
+  border: none;
+}
+
+button.delete-button:hover {
+  background-color: #fee;
+}
+/* Кнопки действий (Ответить, Показать ответы, Удалить) */
+.comment-actions button,
+.reply-content button {
+  background: none;
+  border: none;
+  color: #000;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 3px 8px;
+  font-weight: 500;
+  border-radius: 3px;
+  font-family: "Montserrat";
+  transition: background-color 0.2s;
+}
+
+.comment-actions button:hover,
+.reply-content button:hover {
+  background-color: #f0f0f0;
+}
+
+.comment-actions .delete-button,
+.reply-content .delete-button {
+  color: #e74c3c;
+}
+
+.comment-actions .delete-button:hover,
+.reply-content .delete-button:hover {
+  background-color: #fee;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+  height: 800px;
+}
+
+.loading-spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top: 4px solid #3498db;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 15px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error-message {
+  text-align: center;
+  padding: 30px;
+  color: #e74c3c;
+  background-color: #fef2f2;
+  border-radius: 8px;
+  border: 1px solid #fadcdc;
+}
+
+.error-message button {
+  margin-top: 15px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* --- Адаптивность --- */
+@media screen and (max-width: 768px) {
+  .page-container {
+    padding: 15px;
+  }
+
+  .comments-container {
+    padding: 15px;
+    margin: 0 10px;
+  }
+
+  .comment {
+    margin-bottom: 20px;
+  }
+}

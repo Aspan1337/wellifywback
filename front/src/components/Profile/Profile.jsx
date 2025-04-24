@@ -38,33 +38,40 @@ const Profile = () => {
   };
 
   if (error) return <p className="error-message">{error}</p>;
-  if (!user) return <p>Загрузка...</p>;
-
+  if (!user)
+    return (
+      <div className="loading-state">
+        <div className="loading-spinner"></div>
+        <p>Загрузка...</p>
+      </div>
+    );
   return (
     <div className="page-container">
       <Header />
       <div className="profile-container">
-        <h1 className="profile-title">ЛИЧНЫЙ КАБИНЕТ</h1>
-        <div className="profile-content">
-          <div className="profile-avatar">
-            <div className="avatar-circle"></div>
-          </div>
-          <div className="profile-info">
-            <div className="info-item">{user.last_name}</div>
-            <div className="info-item">{user.first_name}</div>
-            <div className="info-item">{user.email}</div>
-            <div className="info-item info-item-small">
-              ДАТА РЕГИСТРАЦИИ: {user.created_at}
+        <div className="profile-content-wrapper">
+          <h1 className="profile-title">ЛИЧНЫЙ КАБИНЕТ</h1>
+          <div className="profile-content">
+            <div className="profile-avatar">
+              <img src="/images/default-avatar.png" alt="Аватар" />
+            </div>
+            <div className="profile-info">
+              <div className="info-item">{user.last_name}</div>
+              <div className="info-item">{user.first_name}</div>
+              <div className="info-item">{user.email}</div>
+              <div className="info-item info-item-small">
+                ДАТА РЕГИСТРАЦИИ: {user.created_at}
+              </div>
             </div>
           </div>
-        </div>
-        <div className="profile-actions">
-          <button className="edit-button" onClick={handleEditClick}>
-            Редактировать
-          </button>
-          <button className="logout-button" onClick={handleLogoutClick}>
-            Выйти
-          </button>
+          <div className="profile-actions">
+            <button className="edit-button" onClick={handleEditClick}>
+              Редактировать
+            </button>
+            <button className="logout-button" onClick={handleLogoutClick}>
+              Выйти
+            </button>
+          </div>
         </div>
       </div>
       <Footer />

@@ -1,24 +1,31 @@
 .settings-page-container {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
 .settings-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 100px 20px 20px;
+  padding: 0px 20px 250px;
   text-align: center;
-  flex-grow: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
+.settings-content-wrapper {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  background-color: #f9f9fb;
+  padding: 50px 20px 100px;
+  width: 1400px;
+  box-sizing: border-box;
+}
+
 .settings-title {
   font-size: 32px;
   font-weight: bold;
-  margin-bottom: 60px;
+  margin-bottom: 30px;
 }
 
 .settings-content {
@@ -27,15 +34,21 @@
   align-items: center;
 }
 
-.settings-avatar {
-  margin-bottom: 40px;
+.settings-avatar,
+.profile-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.settings-avatar-circle {
-  width: 180px;
-  height: 180px;
+.settings-avatar img,
+.profile-avatar img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
   border-radius: 50%;
-  background-color: #e0e0e0;
+  border: 2px solid #ccc;
 }
 
 .settings-form {
@@ -63,7 +76,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: bold;
   transition: background-color 0.3s;
 }
 
@@ -112,7 +125,6 @@
   background-color: #3457b2;
 }
 
-/* Стили для модального окна */
 .settings-modal-overlay {
   position: fixed;
   top: 0;
@@ -188,10 +200,43 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: bold;
   transition: background-color 0.3s;
 }
+.settings-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 30px;
+  width: 100%;
+}
 
+.settings-modal-back-button {
+  position: absolute;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background-color: #fff;
+  border-radius: 50%;
+  color: #333;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.settings-modal-back-button:hover {
+  background-color: #f0f0f0;
+}
+
+.settings-modal-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
 .settings-modal-save-button:hover {
   background-color: #3457b2;
 }

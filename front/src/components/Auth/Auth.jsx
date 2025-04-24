@@ -120,16 +120,14 @@ const Auth = () => {
         });
         const result = await res.json();
         if (!res.ok) throw new Error(result.error || "Ошибка");
-
+        
         setMessage(result.message || "Успешно");
         setMessageType("success");
-
-        if (!isSignUp) {
-          localStorage.setItem("isAuthenticated", "true");
-          setTimeout(() => {
-            navigate("/");
-          }, 1000);
-        }
+        
+        localStorage.setItem("isAuthenticated", "true");
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
       } catch (err) {
         setMessage(err.message || "Произошла ошибка");
         setMessageType("error");

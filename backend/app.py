@@ -6,12 +6,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from mailjet_rest import Client
 import random
 import string
+from datetime import datetime
 from config import Config
 
 app = Flask(__name__)
 app.config.from_object(Config)
 app.secret_key = "d7e9c8349f874497ad74d52c2b882d22"
-
 
 db = SQLAlchemy(app)
 CORS(app, origins=["http://localhost:5173"], supports_credentials=True)
@@ -34,9 +34,108 @@ class User(UserMixin, db.Model):
     def get_id(self):
         return str(self.id)
 
+class Comment(db.Model):
+    __tablename__ = 'comments'
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    text = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    replies = db.relationship('Reply', backref='comment', cascade="all, delete-orphan")
+
+class Reply(db.Model):
+    __tablename__ = 'replies'
+    id = db.Column(db.Integer, primary_key=True)
+    comment_id = db.Column(db.Integer, db.ForeignKey('comments.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    text = db.Column(db.Text, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    user = db.relationship('User')
+
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+@app.route('/api/comments', methods=['GET'])
+def get_comments():
+    comments = Comment.query.order_by(Comment.created_at).all()
+    comment_list = []
+    current_id = current_user.get_id() if current_user.is_authenticated else None
+
+    for c in comments:
+        user = User.query.get(c.user_id)
+        comment_list.append({
+            "id": c.id,
+            "user": {
+                "id": user.id,
+                "first_name": user.first_name,
+                "last_name": user.last_name
+            },
+            "text": c.text,
+            "date": c.created_at.isoformat(),
+            "replies": [
+                {
+                    "id": r.id,
+                    "user": {
+                        "id": r.user.id,
+                        "first_name": r.user.first_name,
+                        "last_name": r.user.last_name
+                    },
+                    "text": r.text,
+                    "date": r.created_at.isoformat()
+                } for r in c.replies
+            ]
+        })
+
+    response = jsonify({
+        "comments": comment_list,
+        "current_user_id": int(current_id) if current_id else None
+    })
+    return response
+
+@app.route('/api/comments', methods=['POST'])
+@login_required
+def add_comment():
+    data = request.get_json()
+    text = data.get("text")
+    if not text:
+        return jsonify({"error": "Комментарий не может быть пустым"}), 400
+    comment = Comment(user_id=current_user.id, text=text)
+    db.session.add(comment)
+    db.session.commit()
+    return jsonify({"message": "Комментарий добавлен", "id": comment.id})
+
+@app.route('/api/comments/<int:comment_id>/replies', methods=['POST'])
+@login_required
+def add_reply(comment_id):
+    data = request.get_json()
+    text = data.get("text")
+    if not text:
+        return jsonify({"error": "Ответ не может быть пустым"}), 400
+    reply = Reply(comment_id=comment_id, user_id=current_user.id, text=text)
+    db.session.add(reply)
+    db.session.commit()
+    return jsonify({"message": "Ответ добавлен", "id": reply.id})
+
+@app.route('/api/comments/<int:comment_id>', methods=['DELETE'])
+@login_required
+def delete_comment(comment_id):
+    comment = Comment.query.get_or_404(comment_id)
+    if comment.user_id != current_user.id:
+        return jsonify({"error": "Нет доступа"}), 403
+    db.session.delete(comment)
+    db.session.commit()
+    return jsonify({"message": "Комментарий удален"})
+
+@app.route('/api/comments/<int:comment_id>/replies/<int:reply_id>', methods=['DELETE'])
+@login_required
+def delete_reply(comment_id, reply_id):
+    reply = Reply.query.get_or_404(reply_id)
+    if reply.user_id != current_user.id or reply.comment_id != comment_id:
+        return jsonify({"error": "Нет доступа"}), 403
+    db.session.delete(reply)
+    db.session.commit()
+    return jsonify({"message": "Ответ удален"})
 
 @app.route('/api/register', methods=['POST'])
 def register():
@@ -60,7 +159,16 @@ def register():
     )
     db.session.add(new_user)
     db.session.commit()
-    return jsonify({"message": "Регистрация успешна"}), 201
+    login_user(new_user)
+
+    return jsonify({
+        "message": "Регистрация успешна",
+        "first_name": new_user.first_name,
+        "last_name": new_user.last_name,
+        "email": new_user.email,
+        "created_at": new_user.created_at.strftime('%Y-%m-%d')
+    }), 200
+
 
 @app.route('/api/login', methods=['POST'])
 def login():

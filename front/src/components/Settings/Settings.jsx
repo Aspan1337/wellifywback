@@ -97,6 +97,11 @@ const Settings = () => {
     navigate("/profile");
   };
 
+  const closePasswordModal = () => {
+    setShowPasswordModal(false);
+    setModalErrorMessage("");
+  };
+
   const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     setModalErrorMessage("");
@@ -142,74 +147,96 @@ const Settings = () => {
     <div className="settings-page-container">
       <Header />
       <div className="settings-container">
-        <h1 className="settings-title">НАСТРОЙКИ</h1>
+        <div className="settings-content-wrapper">
+          <h1 className="settings-title">НАСТРОЙКИ</h1>
 
-        {successMessage && (
-          <div className="success-message">{successMessage}</div>
-        )}
+          {successMessage && (
+            <div className="success-message">{successMessage}</div>
+          )}
 
-        <div className="settings-content">
-          <div className="settings-avatar">
-            <div className="settings-avatar-circle"></div>
-          </div>
-
-          <form className="settings-form">
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              className="settings-input"
-            />
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              className="settings-input"
-            />
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className="settings-input"
-              readOnly
-            />
-            <button
-              type="button"
-              onClick={() => {
-                setModalErrorMessage("");
-                setShowPasswordModal(true);
-              }}
-              className="settings-change-password-button"
-            >
-              Изменить пароль
-            </button>
-            <div className="settings-actions">
-              <button
-                type="button"
-                onClick={handleCancel}
-                className="settings-cancel-button"
-              >
-                Отмена
-              </button>
-              <button
-                type="button"
-                onClick={handleSubmit}
-                className="settings-save-button"
-              >
-                Сохранить
-              </button>
+          <div className="settings-content">
+            <div className="settings-avatar">
+              <img src="/images/default-avatar.png" alt="Аватар" />
             </div>
-          </form>
+
+            <form className="settings-form">
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                className="settings-input"
+              />
+              <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                className="settings-input"
+              />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="settings-input"
+                readOnly
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  setModalErrorMessage("");
+                  setShowPasswordModal(true);
+                }}
+                className="settings-change-password-button"
+              >
+                Изменить пароль
+              </button>
+              <div className="settings-actions">
+                <button
+                  type="button"
+                  onClick={handleCancel}
+                  className="settings-cancel-button"
+                >
+                  Отмена
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="settings-save-button"
+                >
+                  Сохранить
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
 
       {showPasswordModal && (
         <div className="settings-modal-overlay">
           <div className="settings-modal-content">
-            <h2 className="settings-modal-title">ИЗМЕНЕНИЕ ПАРОЛЯ</h2>
+            <div className="settings-modal-header">
+              <button
+                className="settings-modal-back-button"
+                onClick={closePasswordModal}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  width="24"
+                  height="24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M19 12H5M12 19l-7-7 7-7" />
+                </svg>
+              </button>
+              <h2 className="settings-modal-title">ИЗМЕНЕНИЕ ПАРОЛЯ</h2>
+            </div>
 
             {modalErrorMessage && (
               <div className="modal-error-message">{modalErrorMessage}</div>

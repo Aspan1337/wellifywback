@@ -86,7 +86,6 @@ header.shrink .logo-img {
   background-color: #3457b2;
 }
 
-/* Dropdown styles */
 .dropdown-parent {
   position: relative;
 }
@@ -104,7 +103,6 @@ header.shrink .logo-img {
   padding: 10px 0;
 }
 
-/* Triangle pointer at the top of dropdown */
 .dropdown-menu::before {
   content: "";
   position: absolute;

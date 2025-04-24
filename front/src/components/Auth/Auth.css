@@ -8,8 +8,9 @@
   padding: 20px;
   position: relative;
   box-sizing: border-box;
-  overflow: hidden; 
+  overflow: hidden;
 }
+
 .auth-message {
   margin-bottom: 15px;
   padding: 12px;
@@ -144,6 +145,7 @@ body .auth-page {
   cursor: pointer;
   margin-top: 10px;
   transition: background-color 0.3s;
+  font-weight: bold;
 }
 
 .auth-submit:hover {

@@ -10,7 +10,7 @@ const Header = () => {
   const location = useLocation();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
-    
+
   const toggleUserMenu = () => {
     setShowUserMenu(!showUserMenu);
   };
@@ -23,7 +23,6 @@ const Header = () => {
 
     const auth = localStorage.getItem("isAuthenticated") === "true";
     setIsAuth(auth);
-
 
     const handleScroll = () => {
       const header = document.querySelector("header");
@@ -194,12 +193,41 @@ const Header = () => {
                     </div>
                     <div
                       className="dropdown1-item"
+                      onClick={() => navigate("/comments")}
+                    >
+                      Комментарии
+                    </div>
+                    <div
+                      className="dropdown1-item"
                       onClick={navigateToSettings}
                     >
                       Настройки
                     </div>
                     <div className="dropdown1-item" onClick={handleLogout}>
-                      Выйти
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "100px",
+                        }}
+                      >
+                        Выйти
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="18"
+                          height="18"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                          <polyline points="16 17 21 12 16 7" />
+                          <line x1="21" y1="12" x2="9" y2="12" />
+                        </svg>
+                      </span>
                     </div>
                   </div>
                 )}
