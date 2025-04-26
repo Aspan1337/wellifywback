@@ -30,6 +30,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     password_hash = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    status = db.Column(db.String(50), default="default")
 
     def get_id(self):
         return str(self.id)
@@ -121,7 +122,7 @@ def add_reply(comment_id):
 @login_required
 def delete_comment(comment_id):
     comment = Comment.query.get_or_404(comment_id)
-    if comment.user_id != current_user.id:
+    if comment.user_id != current_user.id and current_user.status not in ["admin", "chief"]:
         return jsonify({"error": "Нет доступа"}), 403
     db.session.delete(comment)
     db.session.commit()
@@ -131,13 +132,12 @@ def delete_comment(comment_id):
 @login_required
 def delete_reply(comment_id, reply_id):
     reply = Reply.query.get_or_404(reply_id)
-    if reply.user_id != current_user.id or reply.comment_id != comment_id:
+    if (reply.user_id != current_user.id or reply.comment_id != comment_id) and current_user.status not in ["admin", "chief"]:
         return jsonify({"error": "Нет доступа"}), 403
     db.session.delete(reply)
     db.session.commit()
     return jsonify({"message": "Ответ удален"})
 
-@app.route('/api/register', methods=['POST'])
 def register():
     data = request.get_json()
     first_name = data.get("first_name")
@@ -180,7 +180,7 @@ def login():
     if not user or not check_password_hash(user.password_hash, password):
         return jsonify({"error": "Неверный логин или пароль"}), 401
 
-    login_user(user)  # ✅ устанавливаем сессию
+    login_user(user)
     return jsonify({
         "message": "Успешный вход",
         "first_name": user.first_name,
@@ -197,7 +197,8 @@ def profile():
         "first_name": user.first_name,
         "last_name": user.last_name,
         "email": user.email,
-        "created_at": user.created_at.strftime('%Y-%m-%d')
+        "created_at": user.created_at.strftime('%Y-%m-%d'),
+        "status": user.status
     })
 
 @app.route('/api/logout', methods=['POST'])
@@ -281,6 +282,58 @@ def update_password():
     current_user.password_hash = generate_password_hash(new_password)
     db.session.commit()
     return jsonify({"message": "Пароль обновлён"}), 200
+
+@app.route("/api/users", methods=["GET"])
+@login_required
+def get_users():
+    if current_user.status not in ["admin", "chief"]:
+        return jsonify({"error": "Недостаточно прав"}), 403
+
+    users = User.query.all()
+    result = []
+    for user in users:
+        result.append({
+            "id": user.id,
+            "name": f"{user.first_name} {user.last_name}",
+            "email": user.email,
+            "status": user.status
+        })
+    return jsonify(result)
+
+
+@app.route("/api/users/<int:user_id>", methods=["DELETE"])
+@login_required
+def delete_user(user_id):
+    if current_user.status not in ["admin", "chief"]:
+        return jsonify({"error": "Недостаточно прав"}), 403
+
+    user = User.query.get_or_404(user_id)
+    if user.status == "chief":
+        return jsonify({"error": "Нельзя удалить супер-админа"}), 403
+
+    db.session.delete(user)
+    db.session.commit()
+    return jsonify({"message": "Пользователь удален"})
+
+
+@app.route("/api/users/<int:user_id>/role", methods=["POST"])
+@login_required
+def update_user_role(user_id):
+    if current_user.status != "chief":
+        return jsonify({"error": "Недостаточно прав"}), 403
+
+    user = User.query.get_or_404(user_id)
+    if user.status == "chief":
+        return jsonify({"error": "Нельзя изменить статус супер-админа"}), 403
+
+    data = request.get_json()
+    new_status = data.get("status")
+    if new_status not in ["admin", "default"]:
+        return jsonify({"error": "Некорректный статус"}), 400
+
+    user.status = new_status
+    db.session.commit()
+    return jsonify({"message": f"Статус обновлен на {new_status}"})
 
 @app.route('/api/test-db', methods=['GET'])
 def test_db():

@@ -14,6 +14,7 @@ import Auth from "./components/Auth/Auth";
 import Profile from "./components/Profile/Profile";
 import Settings from "./components/Settings/Settings";
 import Comments from "./components/Comments/Comments";
+import AdminPanel from "./components/AdminPanel/AdminPanel";
 
 function HomePage() {
   return (
@@ -62,6 +63,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/comments" element={<Comments />} />
+        <Route path="/admin" element={<AdminPanel />} />
       </Routes>
     </Router>
   );

@@ -12,6 +12,35 @@ const Auth = () => {
   const [resetStep, setResetStep] = useState("email");
   const navigate = useNavigate();
 
+  const renderEyeIcon = () => (
+    <span className="toggle-password" onClick={togglePasswordVisibility}>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+      >
+        {showPassword ? (
+          <>
+            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+            <line x1="1" y1="1" x2="23" y2="23" />
+          </>
+        ) : (
+          <>
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+            <circle cx="12" cy="12" r="3" />
+          </>
+        )}
+      </svg>
+    </span>
+  );
+
   useEffect(() => {
     const originalStyle = window.getComputedStyle(document.body).overflow;
     document.body.style.overflow = "hidden";
@@ -120,10 +149,10 @@ const Auth = () => {
         });
         const result = await res.json();
         if (!res.ok) throw new Error(result.error || "Ошибка");
-        
+
         setMessage(result.message || "Успешно");
         setMessageType("success");
-        
+
         localStorage.setItem("isAuthenticated", "true");
         setTimeout(() => {
           navigate("/");
@@ -134,6 +163,22 @@ const Auth = () => {
       }
     }
   };
+
+  const renderPasswordField = (
+    name = "password",
+    placeholder = "Введите пароль"
+  ) => (
+    <div className="password-field">
+      <input
+        name={name}
+        type={showPassword ? "text" : "password"}
+        placeholder={placeholder}
+        minLength="8"
+        required
+      />
+      {renderEyeIcon()}
+    </div>
+  );
 
   const renderForgotPasswordEmail = () => (
     <>
@@ -179,18 +224,7 @@ const Auth = () => {
       </div>
       <div className="form-group">
         <label>Новый пароль</label>
-        <div className="password-field">
-          <input
-            name="newPassword"
-            type={showPassword ? "text" : "password"}
-            placeholder="Введите новый пароль"
-            minLength="8"
-            required
-          />
-          <span className="toggle-password" onClick={togglePasswordVisibility}>
-            {showPassword ? "Скрыть" : "Показать"}
-          </span>
-        </div>
+        {renderPasswordField("newPassword", "Введите новый пароль")}
       </div>
       <button className="auth-submit">Сохранить новый пароль</button>
       <div className="auth-switch">
@@ -276,21 +310,7 @@ const Auth = () => {
                 </div>
                 <div className="form-group">
                   <label>Пароль</label>
-                  <div className="password-field">
-                    <input
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Введите пароль"
-                      minLength="8"
-                      required
-                    />
-                    <span
-                      className="toggle-password"
-                      onClick={togglePasswordVisibility}
-                    >
-                      {showPassword ? "Скрыть" : "Показать"}
-                    </span>
-                  </div>
+                  {renderPasswordField()}
                 </div>
                 <button className="auth-submit">Создать аккаунт</button>
                 <div className="auth-switch">
@@ -315,21 +335,7 @@ const Auth = () => {
                 </div>
                 <div className="form-group">
                   <label>Пароль</label>
-                  <div className="password-field">
-                    <input
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Введите пароль"
-                      minLength="8"
-                      required
-                    />
-                    <span
-                      className="toggle-password"
-                      onClick={togglePasswordVisibility}
-                    >
-                      {showPassword ? "Скрыть" : "Показать"}
-                    </span>
-                  </div>
+                  {renderPasswordField()}
                 </div>
                 <button className="auth-submit">Войти</button>
                 <div className="auth-switch">

@@ -10,6 +10,7 @@ const Header = () => {
   const location = useLocation();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
+  const [userRole, setUserRole] = useState("");
 
   const toggleUserMenu = () => {
     setShowUserMenu(!showUserMenu);
@@ -23,6 +24,16 @@ const Header = () => {
 
     const auth = localStorage.getItem("isAuthenticated") === "true";
     setIsAuth(auth);
+
+    if (auth) {
+      fetch("http://localhost:5000/api/profile", {
+        credentials: "include",
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setUserRole(data.status);
+        });
+    }
 
     const handleScroll = () => {
       const header = document.querySelector("header");
@@ -203,6 +214,14 @@ const Header = () => {
                     >
                       Настройки
                     </div>
+                    {(userRole === "admin" || userRole === "chief") && (
+                      <div
+                        className="dropdown1-item"
+                        onClick={() => navigate("/admin")}
+                      >
+                        Админ-панель
+                      </div>
+                    )}
                     <div className="dropdown1-item" onClick={handleLogout}>
                       <span
                         style={{

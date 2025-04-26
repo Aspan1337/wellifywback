@@ -13,6 +13,7 @@ const Comments = () => {
   const [error, setError] = useState(null);
   const [totalCommentsCount, setTotalCommentsCount] = useState(0);
   const [currentUserId, setCurrentUserId] = useState(null);
+  const [userStatus, setUserStatus] = useState("default");
 
   const calculateTotalComments = (commentsData) => {
     let count = commentsData.length;
@@ -36,6 +37,17 @@ const Comments = () => {
         const initialExpanded = {};
         (data.comments || []).forEach((c) => (initialExpanded[c.id] = false));
         setExpandedComments(initialExpanded);
+
+        if (data.current_user_id) {
+          const profileRes = await fetch("http://localhost:5000/api/profile", {
+            credentials: "include",
+          });
+          if (profileRes.ok) {
+            const profileData = await profileRes.json();
+            setUserStatus(profileData.status);
+          }
+        }
+
         setIsLoading(false);
       } catch (err) {
         setError("Не удалось загрузить комментарии.");
@@ -125,6 +137,10 @@ const Comments = () => {
     });
   };
 
+  const canDeleteComment = (userId) => {
+    return userId === currentUserId || ["admin", "chief"].includes(userStatus);
+  };
+
   return (
     <div className="page-container">
       <Header />
@@ -177,7 +193,7 @@ const Comments = () => {
                     >
                       {replyingTo === comment.id ? "Отменить" : "Ответить"}
                     </button>
-                    {comment.user.id === currentUserId && (
+                    {canDeleteComment(comment.user.id) && (
                       <button
                         onClick={() => handleDeleteComment(comment.id)}
                         className="delete-button"
@@ -226,7 +242,7 @@ const Comments = () => {
                         >
                           {reply.text}
                         </p>
-                        {reply.user.id === currentUserId && (
+                        {canDeleteComment(reply.user.id) && (
                           <button
                             onClick={() =>
                               handleDeleteReply(comment.id, reply.id)

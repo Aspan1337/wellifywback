@@ -1,0 +1,146 @@
+.admin-panel {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Montserrat";
+  margin-bottom: 650px;
+}
+
+h1 {
+  text-align: center;
+  font-size: 32px;
+  margin-bottom: 40px;
+}
+
+.admin-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.primary-btn {
+  background-color: #4169e1;
+  color: white;
+}
+
+.primary-btn:hover {
+  background-color: #3457b2;
+}
+
+.users-container {
+  background-color: #f7f9fc;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-container {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px 40px 12px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888;
+}
+
+.users-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.user-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user-info h3 {
+  margin: 0 0 5px 0;
+  font-size: 18px;
+}
+
+.user-info p {
+  margin: 0;
+  color: #666;
+}
+
+.user-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.delete-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.delete-btn:hover {
+  background-color: #c0392b;
+}
+
+.admin-btn {
+  background-color: #4169e1;
+  color: white;
+}
+
+.admin-btn:hover {
+  background-color: #3457b2;
+}
+
+.remove-admin-btn {
+  background-color: #f39c12;
+  color: white;
+}
+
+.remove-admin-btn:hover {
+  background-color: #e67e22;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .user-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .user-info {
+    margin-bottom: 15px;
+  }
+
+  .user-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 5px;
+  }
+}

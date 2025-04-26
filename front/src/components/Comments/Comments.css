@@ -43,13 +43,11 @@
   min-height: 100px;
   padding: 12px;
   border-radius: 6px;
-  font-family: "Montserrat";
   font-size: 16px;
   border: 1px solid #ccc;
   resize: vertical;
 }
 
-/* --- Комментарии и ответы --- */
 .comment {
   margin-bottom: 25px;
   padding: 15px;
@@ -73,7 +71,6 @@
   width: 100%;
   min-height: 60px;
   padding: 10px;
-  font-family: "Montserrat";
   border: 1px solid #ccc;
   border-radius: 5px;
   margin-bottom: 10px;
@@ -88,7 +85,6 @@
   border: 1px solid #e6e6e6;
 }
 
-/* --- Дата и имя пользователя --- */
 .comment p,
 .reply p {
   margin: 4px 0;
@@ -99,7 +95,6 @@
   color: #2c3e50;
 }
 
-/* --- Кнопки --- */
 button {
   cursor: pointer;
 }
@@ -132,7 +127,6 @@ button.delete-button {
 button.delete-button:hover {
   background-color: #fee;
 }
-/* Кнопки действий (Ответить, Показать ответы, Удалить) */
 .comment-actions button,
 .reply-content button {
   background: none;
@@ -143,7 +137,6 @@ button.delete-button:hover {
   padding: 3px 8px;
   font-weight: 500;
   border-radius: 3px;
-  font-family: "Montserrat";
   transition: background-color 0.2s;
 }
 
@@ -210,7 +203,6 @@ button.delete-button:hover {
   cursor: pointer;
 }
 
-/* --- Адаптивность --- */
 @media screen and (max-width: 768px) {
   .page-container {
     padding: 15px;
