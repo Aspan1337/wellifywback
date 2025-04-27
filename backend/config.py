@@ -1,7 +1,13 @@
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 class Config:
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:123456@localhost:1234/wellifydb'
+    SECRET_KEY = os.getenv("SECRET_KEY")
+    SQLALCHEMY_DATABASE_URI = os.getenv("DATABASE_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    MAILJET_API_KEY = "38077f95ebebf771fa78e538e48b54fd"
-    MAILJET_SECRET_KEY = "59ba7b6ced053d80e099e17a46da1401"
-    MAILJET_SENDER = "wellify.official@gmail.com"
+    MAILJET_API_KEY = os.getenv("MAILJET_API_KEY")
+    MAILJET_SECRET_KEY = os.getenv("MAILJET_SECRET_KEY")
+    MAILJET_SENDER = os.getenv("MAILJET_SENDER")

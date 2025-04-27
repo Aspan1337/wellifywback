@@ -29,58 +29,44 @@ const Profile = () => {
   const [isOwner, setIsOwner] = useState(true);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileAndWorkouts = async () => {
       try {
-        const response = await fetch(
-          id
-            ? `http://localhost:5000/api/profile/${id}`
-            : "http://localhost:5000/api/profile",
-          {
-            credentials: "include",
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Ошибка загрузки профиля");
-        }
-
-        const data = await response.json();
-        setUser(data);
-
+        const profileUrl = id
+          ? `http://localhost:5000/api/profile/${id}`
+          : "http://localhost:5000/api/profile";
+        const workoutsUrl = id
+          ? `http://localhost:5000/api/user-workouts/user/${id}`
+          : "http://localhost:5000/api/user-workouts";
+  
+        const [profileRes, workoutsRes] = await Promise.all([
+          fetch(profileUrl, { credentials: "include" }),
+          fetch(workoutsUrl, { credentials: "include" }),
+        ]);
+  
+        if (!profileRes.ok || !workoutsRes.ok)
+          throw new Error("Ошибка при загрузке данных");
+  
+        const profileData = await profileRes.json();
+        const workoutsData = await workoutsRes.json();
+  
+        setUser(profileData);
+        setUserWorkouts(workoutsData);
+  
         if (id) {
           setIsOwner(false);
         } else {
           setIsOwner(true);
         }
+  
       } catch (err) {
-        setError(err.message);
+        console.error(err);
         navigate("/auth");
       }
     };
-
-    const fetchWorkouts = async () => {
-      try {
-        const response = await fetch(
-          id
-            ? `http://localhost:5000/api/user-workouts/${id}`
-            : "http://localhost:5000/api/user-workouts",
-          {
-            credentials: "include",
-          }
-        );
-        if (!response.ok) {
-          throw new Error("Ошибка загрузки тренировок");
-        }
-        const data = await response.json();
-        setUserWorkouts(data);
-      } catch (err) {
-        console.error("Ошибка при загрузке тренировок:", err);
-      }
-    };
-
-    fetchProfile();
-    fetchWorkouts();
-  }, [navigate, id]);
+  
+    fetchProfileAndWorkouts();
+  }, [id, navigate]);
+  
 
   const handleEditClick = () => {
     navigate("/settings");
