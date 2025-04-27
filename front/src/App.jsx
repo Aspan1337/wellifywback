@@ -1,20 +1,22 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header/Header";
-import Main from "./components/Main/Main";
-import Workout from "./components/Workout/Workout";
-import GymSlider from "./components/GymSlider/GymSlider";
-import Diet from "./components/Diet/Diet";
-import Calculator from "./components/Calculator/Calculator";
 import Footer from "./components/Footer/Footer";
 import ScrollToTop from "./components/ScrollToTop/ScrollToTop";
-import Individual_Warmups from "./components/Individual_Warmups/Individual_Warmups";
-import SportBrands from "./components/SportBrands/SportBrands";
-import Auth from "./components/Auth/Auth";
-import Profile from "./components/Profile/Profile";
-import Settings from "./components/Settings/Settings";
-import Comments from "./components/Comments/Comments";
-import AdminPanel from "./components/AdminPanel/AdminPanel";
+
+import Main from "./pages/MainPage/Main/Main";
+import Workout from "./pages/MainPage/Workout/Workout";
+import GymSlider from "./pages/MainPage/GymSlider/GymSlider";
+import Diet from "./pages/MainPage/Diet/Diet";
+import Calculator from "./pages/MainPage/Calculator/Calculator";
+import Individual_Warmups from "./pages/MainPage/Individual_Warmups/Individual_Warmups";
+import SportBrands from "./pages/MainPage/SportBrands/SportBrands";
+
+import Auth from "./pages/Auth/Auth";
+import Profile from "./pages/Profile/Profile";
+import Settings from "./pages/Settings/Settings";
+import Comments from "./pages/Comments/Comments";
+import AdminPanel from "./pages/AdminPanel/AdminPanel";
 
 function HomePage() {
   return (

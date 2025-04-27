@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 import "./Profile.css";
 import { useParams } from "react-router-dom";
 
@@ -286,7 +286,7 @@ const Profile = () => {
 
           {/* Раздел с тренировками пользователя */}
           <div className="user-workouts-section">
-            <h2 className="workouts-title">МОИ ТРЕНИРОВКИ</h2>
+            <h2 className="workouts-title">СОБСТВЕННЫЕ ТРЕНИРОВКИ</h2>
 
             {isOwner && (
               <button
@@ -533,7 +533,9 @@ const Profile = () => {
                 ))
               ) : (
                 <p className="no-workouts-message">
-                  У вас пока нет сохраненных тренировок.
+                  {isOwner
+                    ? "У вас пока нет сохраненных тренировок."
+                    : "У пользователя пока нет сохраненных тренировок."}
                 </p>
               )}
             </div>
@@ -566,7 +568,6 @@ const Profile = () => {
           </div>
         </div>
       )}
-
       <Footer />
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./AdminPanel.css";
-import Header from "../Header/Header";
-import Footer from "../Footer/Footer";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
 
 const AdminPanel = () => {
   const [users, setUsers] = useState([]);
