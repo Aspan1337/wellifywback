@@ -61,6 +61,7 @@ function App() {
         <Route path="/auth" element={<Auth />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/profile/:id" element={<Profile />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/comments" element={<Comments />} />
         <Route path="/admin" element={<AdminPanel />} />

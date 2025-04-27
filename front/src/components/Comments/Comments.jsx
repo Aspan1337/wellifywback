@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import "./Comments.css";
 import Header from "../Header/Header";
 import Footer from "../Footer/Footer";
+import { useNavigate } from "react-router-dom";
 
 const Comments = () => {
+  const navigate = useNavigate();
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [replyText, setReplyText] = useState("");
@@ -171,11 +173,19 @@ const Comments = () => {
               {comments.map((comment) => (
                 <div key={comment.id} className="comment">
                   <p>
-                    <b>
-                      {comment.user.id === currentUserId
-                        ? "Вы"
-                        : `${comment.user.first_name} ${comment.user.last_name}`}
-                    </b>{" "}
+                    {comment.user.id === currentUserId ? (
+                      <b>Вы</b>
+                    ) : (
+                      <b
+                        onClick={() => navigate(`/profile/${comment.user.id}`)}
+                        style={{
+                          cursor: "pointer",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        {comment.user.first_name} {comment.user.last_name}
+                      </b>
+                    )}{" "}
                     — {formatDate(comment.date)}
                   </p>
                   <p
