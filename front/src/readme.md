@@ -1,29 +1,31 @@
-WELLIFY/
-├── .github/                     # Настройки и рабочие процессы GitHub
-├── dist/                        # Скомпилированные файлы для развертывания
-├── node_modules/                # Пакеты Node.js, установленные через npm
-├── public/                      # Публичные статические файлы
-│   ├── dumbbells/               # 3D-объекты гантелей
-│   ├── images/                  # Изображения и графические ресурсы
-│   ├── wellifyfav.svg
-│   ├── wellifylogo.png
-│   └── wellifylogo1.png
-├── src/
-│   ├── assets/                  # Дополнительные ресурсы
-│   ├── components/              # Компоненты React
-│   │   ├── Calculator/
-│   │   ├── Diet/
+front/
+├── .github/                # Конфигурации GitHub (опционально)
+├── dist/                    # Сборка проекта (выходные файлы)
+├── node_modules/            # Папка зависимостей (автоматически создаётся)
+├── public/                  # Публичные файлы (например, index.html)
+├── src/                     # Исходный код приложения
+│   ├── assets/              # Статические ресурсы (изображения, иконки и пр.)
+│   ├── components/          # Переиспользуемые UI-компоненты
 │   │   ├── FeedbackModal/
 │   │   ├── Footer/
-│   │   ├── GymSlider/
 │   │   ├── Header/
-│   │   ├── Individual_Warmups/
-│   │   ├── Main/
-│   │   ├── ScrollToTop/
-│   │   └── Workout/
-│   ├── App.css                  # Глобальные стили приложения
-│   ├── App.jsx                  # Корневой компонент React
-│   └── main.jsx
+│   │   └── ScrollToTop/
+│   ├── pages/               # Страницы приложения (по маршрутам)
+│   │   ├── AdminPanel/
+│   │   ├── Auth/
+│   │   ├── Comments/
+│   │   ├── MainPage/
+│   │   │   ├── Calculator/
+│   │   │   ├── Diet/
+│   │   │   ├── GymSlider/
+│   │   │   ├── Individual_Warmups/
+│   │   │   ├── Main/
+│   │   │   ├── SportBrands/
+│   │   │   └── Workout/
+│   │   ├── Profile/
+│   │   └── Settings/
+│   ├── App.css               # Основные стили приложения
+│   ├── App.jsx               # Основной компонент приложения
+│   └── main.jsx              # Точка входа в приложение (ReactDOM.createRoot)
 ├── .env                         # Файл переменных окружения
 ├── index.html                   # Основной HTML-файл приложения
-
