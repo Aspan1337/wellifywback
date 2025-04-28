@@ -4,6 +4,7 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 
 const AdminPanel = () => {
+  const API_BASE = import.meta.env.VITE_API_URL;
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -11,7 +12,7 @@ const AdminPanel = () => {
   const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/profile", {
+    fetch(`${API_BASE}/api/profile`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -21,7 +22,7 @@ const AdminPanel = () => {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/users", {
+    fetch(`${API_BASE}/api/users`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -47,7 +48,7 @@ const AdminPanel = () => {
   };
 
   const deleteUser = async (userId) => {
-    const res = await fetch(`http://localhost:5000/api/users/${userId}`, {
+    const res = await fetch(`${API_BASE}/api/users/${userId}`, {
       method: "DELETE",
       credentials: "include",
     });
@@ -65,7 +66,7 @@ const AdminPanel = () => {
   };
 
   const toggleAdminStatus = async (userId, makeAdmin) => {
-    const res = await fetch(`http://localhost:5000/api/users/${userId}/role`, {
+    const res = await fetch(`${API_BASE}/api/users/${userId}/role`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",

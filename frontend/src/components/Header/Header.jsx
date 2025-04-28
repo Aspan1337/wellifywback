@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./Header.css";
 
 const Header = () => {
+  const API_BASE = import.meta.env.VITE_API_URL;
   const [showWorkoutDropdown, setShowWorkoutDropdown] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
   const dropdownRef = useRef(null);
@@ -26,7 +27,7 @@ const Header = () => {
     setIsAuth(auth);
 
     if (auth) {
-      fetch("http://localhost:5000/api/profile", {
+      fetch(`${API_BASE}/api/profile`, {
         credentials: "include",
       })
         .then((res) => res.json())
@@ -109,7 +110,7 @@ const Header = () => {
   };
 
   const handleLogout = async () => {
-    await fetch("http://localhost:5000/api/logout", {
+    await fetch(`${API_BASE}/api/logout`, {
       method: "POST",
       credentials: "include",
     });

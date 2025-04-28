@@ -6,6 +6,7 @@ import "./Profile.css";
 import { useParams } from "react-router-dom";
 
 const Profile = () => {
+  const API_BASE = import.meta.env.VITE_API_URL;
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
   const [showWorkoutForm, setShowWorkoutForm] = useState(false);
@@ -32,11 +33,11 @@ const Profile = () => {
     const fetchProfileAndWorkouts = async () => {
       try {
         const profileUrl = id
-          ? `http://localhost:5000/api/profile/${id}`
-          : "http://localhost:5000/api/profile";
+          ? `${API_BASE}/api/profile/${id}`
+          : `${API_BASE}/api/profile`;
         const workoutsUrl = id
-          ? `http://localhost:5000/api/user-workouts/user/${id}`
-          : "http://localhost:5000/api/user-workouts";
+          ? `${API_BASE}/api/user-workouts/user/${id}`
+          : `${API_BASE}/api/user-workouts`;
   
         const [profileRes, workoutsRes] = await Promise.all([
           fetch(profileUrl, { credentials: "include" }),
@@ -73,7 +74,7 @@ const Profile = () => {
   };
 
   const handleLogoutClick = async () => {
-    await fetch("http://localhost:5000/api/logout", {
+    await fetch(`${API_BASE}/api/logout`, {
       method: "POST",
       credentials: "include",
     });
@@ -106,7 +107,7 @@ const Profile = () => {
   const handleDeleteWorkout = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/api/user-workouts/${workoutToDelete}`,
+        `${API_BASE}/api/user-workouts/${workoutToDelete}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -187,7 +188,7 @@ const Profile = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/api/user-workouts", {
+      const response = await fetch(`${API_BASE}/api/user-workouts`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

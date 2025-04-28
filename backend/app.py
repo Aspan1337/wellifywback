@@ -3,6 +3,9 @@ from config import Config
 from extensions import db, login_manager, cors
 from models.user import User
 from routes import register_routes
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
@@ -10,7 +13,7 @@ def create_app():
 
     db.init_app(app)
     login_manager.init_app(app)
-    cors.init_app(app, origins=["http://localhost:5173"], supports_credentials=True)
+    cors.init_app(app, origins=["http://localhost:3000"], supports_credentials=True)
 
     register_routes(app)
 

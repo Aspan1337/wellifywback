@@ -5,6 +5,7 @@ import Footer from "../../components/Footer/Footer";
 import "./Settings.css";
 
 const Settings = () => {
+  const API_BASE = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -28,7 +29,7 @@ const Settings = () => {
   });
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/profile", {
+    fetch(`${API_BASE}/api/profile`, {
       credentials: "include",
     })
       .then((res) => res.json())
@@ -108,7 +109,7 @@ const Settings = () => {
 
   const handleSubmit = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/update-profile", {
+      const res = await fetch(`${API_BASE}/api/update-profile`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -149,7 +150,7 @@ const Settings = () => {
       return;
     }
     try {
-      const res = await fetch("http://localhost:5000/api/update-password", {
+      const res = await fetch(`${API_BASE}/api/update-password`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",

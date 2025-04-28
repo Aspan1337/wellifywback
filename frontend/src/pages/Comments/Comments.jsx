@@ -5,6 +5,7 @@ import Footer from "../../components/Footer/Footer";
 import { useNavigate } from "react-router-dom";
 
 const Comments = () => {
+  const API_BASE = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -29,7 +30,7 @@ const Comments = () => {
     const fetchComments = async () => {
       try {
         setIsLoading(true);
-        const res = await fetch("http://localhost:5000/api/comments", {
+        const res = await fetch(`${API_BASE}/api/comments`, {
           credentials: "include",
         });
         const data = await res.json();
@@ -41,7 +42,7 @@ const Comments = () => {
         setExpandedComments(initialExpanded);
 
         if (data.current_user_id) {
-          const profileRes = await fetch("http://localhost:5000/api/profile", {
+          const profileRes = await fetch(`${API_BASE}/api/profile`, {
             credentials: "include",
           });
           if (profileRes.ok) {
@@ -63,7 +64,7 @@ const Comments = () => {
     e.preventDefault();
     if (!newComment.trim()) return;
     try {
-      const res = await fetch("http://localhost:5000/api/comments", {
+      const res = await fetch(`${API_BASE}/api/comments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -81,7 +82,7 @@ const Comments = () => {
     if (!replyText.trim()) return;
     try {
       const res = await fetch(
-        `http://localhost:5000/api/comments/${commentId}/replies`,
+        `${API_BASE}/api/comments/${commentId}/replies`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -99,7 +100,7 @@ const Comments = () => {
 
   const handleDeleteComment = async (id) => {
     try {
-      await fetch(`http://localhost:5000/api/comments/${id}`, {
+      await fetch(`${API_BASE}/api/comments/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -112,7 +113,7 @@ const Comments = () => {
   const handleDeleteReply = async (commentId, replyId) => {
     try {
       await fetch(
-        `http://localhost:5000/api/comments/${commentId}/replies/${replyId}`,
+        `${API_BASE}/api/comments/${commentId}/replies/${replyId}`,
         {
           method: "DELETE",
           credentials: "include",
