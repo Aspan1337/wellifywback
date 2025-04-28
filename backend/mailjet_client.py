@@ -10,7 +10,6 @@ mailjet = Client(
 )
 
 def send_reset_code(email, code):
-    """Отправка кода восстановления на email через Mailjet."""
     data = {
         'Messages': [
             {

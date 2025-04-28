@@ -406,7 +406,6 @@ h4 {
   margin-bottom: 10px;
 }
 
-/* Стили для модального окна подтверждения удаления */
 .delete-modal-overlay {
   position: fixed;
   top: 0;

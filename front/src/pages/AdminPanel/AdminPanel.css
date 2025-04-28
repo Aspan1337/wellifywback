@@ -124,7 +124,6 @@
   background-color: #e67e22;
 }
 
-/* Responsive styles */
 @media (max-width: 768px) {
   .user-card {
     flex-direction: column;
