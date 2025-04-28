@@ -93,7 +93,7 @@ const AdminPanel = () => {
     <div className="adminpage-container">
       <div className="admin-panel">
         <Header />
-        <h1>АДМИН-ПАНЕЛЬ</h1>
+        <h1 className="h1-admin">АДМИН-ПАНЕЛЬ</h1>
 
         <div className="admin-controls">
           <button className="btn primary-btn" onClick={toggleUsersList}>

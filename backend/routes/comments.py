@@ -1,7 +1,9 @@
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from extensions import db
-from models import Comment, Reply, User
+from models.comment import Comment
+from models.reply import Reply
+from models.user import User
 
 comments_bp = Blueprint('comments', __name__)
 

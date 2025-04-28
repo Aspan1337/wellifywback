@@ -1,7 +1,10 @@
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from extensions import db
-from models import Workout, WorkoutSection, Exercise, User
+from models.workout import Workout
+from models.workout_section import WorkoutSection
+from models.exercise import Exercise
+from models.user import User
 
 workouts_bp = Blueprint('workouts', __name__)
 

@@ -1,7 +1,7 @@
 from flask import Flask
 from config import Config
 from extensions import db, login_manager, cors
-from models import User
+from models.user import User
 from routes import register_routes
 
 def create_app():

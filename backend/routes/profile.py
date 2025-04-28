@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, request
 from flask_login import login_required, current_user
 from extensions import db
-from models import User
+from models.user import User
 from werkzeug.security import check_password_hash, generate_password_hash
 
 profile_bp = Blueprint('profile', __name__)
