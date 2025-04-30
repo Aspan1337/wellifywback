@@ -17,6 +17,7 @@ dist-ssr
 .env.test.local
 .env.production.local
 wait_for_db.py
+docker-compose.yml
 
 # Editor directories and files
 .vscode/*
